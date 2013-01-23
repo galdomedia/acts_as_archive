@@ -112,17 +112,19 @@ class ActsAsArchive
           
           klass = eval(options[:class]) rescue nil
           
-          if klass
-            klass.send :set_table_name, options[:table]
-          else
+          unless klass
             eval <<-EVAL
               class ::#{options[:class]} < ActiveRecord::Base
-                set_table_name "#{options[:table]}"
               end
             EVAL
             klass = eval("::#{options[:class]}")
           end
-          
+          if klass.respond_to?(:table_name=)
+            klass.table_name = options[:table]
+          else
+            klass.send :set_table_name, options[:table]
+          end
+
           klass.record_timestamps = options[:timestamps].inspect
           klass.acts_as_archive(:class => self, :archive => true)
         
