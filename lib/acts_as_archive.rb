@@ -53,7 +53,7 @@ class ActsAsArchive
               options = config.pop
             end
             config.each do |c|
-              klass.acts_as_archive options.merge(c)
+              klass.acts_as_archive options.with_indifferent_access.merge(c)
             end
           end
         end
