@@ -110,11 +110,19 @@ class ActsAsArchive
             options[:table] = "archived_#{self.table_name}"
           end
 
+          unless options[:parent]
+            parent = self.superclass
+            while !parent.abstract_class? and parent != ActiveRecord::Base do
+              parent = parent.superclass
+            end
+            options[:parent] = "#{parent}"
+          end
+
           klass = eval(options[:class]) rescue nil
 
           unless klass
             eval <<-EVAL
-              class ::#{options[:class]} < ActiveRecord::Base
+              class ::#{options[:class]} < #{options[:parent]}
               end
             EVAL
             klass = eval("::#{options[:class]}")

@@ -22,7 +22,7 @@ gem install acts_as_archive
 config.gem 'acts_as_archive'
 </pre>
 
-### Rails 3
+### Rails 3 or 4
 
 #### Gemfile
 
@@ -43,11 +43,12 @@ end
 config/acts\_as\_archive.yml
 ----------------------------
 
-Create <code>config/acts\_as\_archive.yml</code> to define the archive class and archive table for each of your models:
+Create <code>config/acts\_as\_archive.yml</code> to define the archive class, parent of the archive class and archive table for each of your models:
 
 <pre>
 Article:
   - class: Article::Archive
+    parent: ActiveRecord::Base
     table: archived_articles
 </pre>
 
