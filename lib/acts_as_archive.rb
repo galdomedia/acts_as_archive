@@ -140,7 +140,7 @@ class ActsAsArchive
             if !ActsAsArchive.find(association.klass).empty? && association.options[:dependent]
               opts = association.options.dup
               opts[:class_name] = "::#{association.class_name}::Archive"
-              opts[:foreign_key] = association.primary_key_name
+              opts[:foreign_key] = association.respond_to?(:foreign_key) ? association.foreign_key : association.primary_key_name
               klass.send association.macro, association.name, opts
             end
           end
